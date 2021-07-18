@@ -40,8 +40,8 @@ jobs:
 
       - id: tag
         run: |
-          docker build --tag test-hello-world:${{ GITHUB_RUN_NUMBER }} .
-          echo "::set-output name=tag::${{ GITHUB_RUN_NUMBER }}"
+          docker build --tag test-hello-world:${GITHUB_RUN_NUMBER} .
+          echo "::set-output name=tag::${GITHUB_RUN_NUMBER}"
         
 
       - name: Push to ECR
@@ -51,7 +51,7 @@ jobs:
           access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           region: ap-southeast-2
-          image: test-hello-world:${{ GITHUB_RUN_NUMBER }}
+          image: test-hello-world:${GITHUB_RUN_NUMBER}
 
   update-dev-image:
     runs-on: ubuntu-latest
