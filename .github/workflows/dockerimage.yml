@@ -37,7 +37,8 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - run: docker build --tag test-hello-world:v1.0.3 .
+      - run: docker build --tag test-hello-world:v1.0.4 .
+      - run: echo "version=v1.0.4" >> $GITHUB_ENV
       - name: Push to ECR
         id: ecr
         uses: jwalton/gh-ecr-push@v1
@@ -45,7 +46,7 @@ jobs:
           access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           region: ap-southeast-2
-          image: test-hello-world:v1.0.3
+          image: test-hello-world:"${{ env.version }}"
 
   update-dev-image:
     runs-on: ubuntu-latest
@@ -59,7 +60,7 @@ jobs:
     - run: git clone https://${REPO_TOKEN}@github.com/subudear/gitops-infra-helloworld.git .
       env:
         REPO_TOKEN: ${{secrets.REPO_TOKEN}}
-    - run: kustomize edit set image 706949302588.dkr.ecr.ap-southeast-2.amazonaws.com/test-hello-world:${GITHUB_REF#refs/*/}
+    - run: kustomize edit set image 706949302588.dkr.ecr.ap-southeast-2.amazonaws.com/test-hello-world:"${{ env.version }}"
       working-directory: ./deploy/enviroments/dev
     - run: git add .
     - run: |
