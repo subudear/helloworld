@@ -47,3 +47,25 @@ jobs:
           region: ap-southeast-2
           image: test-hello-world:v1.0
 
+  update-dev-image:
+    runs-on: ubuntu-latest
+    if: contains(github.ref, 'heads')
+    needs:
+    - build
+    steps:
+    - uses: imranismail/setup-kustomize@v1
+      with:
+        kustomize-version: 3.8.6
+    - run: git clone https://${REPO_TOKEN}@github.com/subudear/gitops-infra-helloworld .
+      env:
+        REPO_TOKEN: ${{secrets.REPO_TOKEN}}
+    - run: kustomize edit set image test-hello-world:sha-$(git rev-parse --short $GITHUB_SHA)
+      working-directory: ./deploy/enviroments/dev
+    - run: git add .
+    - run: |
+        git config user.email "$EMAIL"
+        git config user.name "$GITHUB_ACTOR"
+      env:
+        EMAIL: ${{secrets.EMAIL}}
+    - run: git commit -m "Set dev image tag to short sha"
+    - run: git push
