@@ -11,7 +11,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 
 func health(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "<h1>Service Health Check - Pass</h1>")
+	fmt.Fprintf(w, "<h1>Service Health Check : Pass</h1>")
 }
 
 func main() {
