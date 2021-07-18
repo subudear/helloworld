@@ -47,7 +47,3 @@ jobs:
           region: ap-southeast-2
           image: ${{ steps.docker_meta.outputs.tags }}
 
-		  
-      -
-        name: Image tags
-        run: echo "${{ steps.docker_meta.outputs.tags }}"
