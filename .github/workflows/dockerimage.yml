@@ -1,0 +1,53 @@
+name: Publish Docker Image
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'deploy/**'
+  release:
+    types:
+      - published
+    
+
+jobs:
+
+  build:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+
+      -
+        name: Docker meta
+        id: docker_meta
+        uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: gbaeke/flux-rt
+          tag-sha: true
+          tag-edge: false
+
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+
+      - name: Push to ECR
+        id: ecr
+        uses: jwalton/gh-ecr-push@v1
+        with:
+          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: ap-southeast-2
+          image: ${{ steps.docker_meta.outputs.tags }}
+
+		  
+      -
+        name: Image tags
+        run: echo "${{ steps.docker_meta.outputs.tags }}"
