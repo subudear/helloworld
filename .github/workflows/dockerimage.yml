@@ -21,14 +21,7 @@ jobs:
       - name: Check out
         uses: actions/checkout@v2
 
-      -
-        name: Docker meta
-        id: docker_meta
-        uses: crazy-max/ghaction-docker-meta@v1
-        with:
-          images: gbaeke/flux-rt
-          tag-sha: true
-          tag-edge: false
+
 
       -
         name: Set up QEMU
