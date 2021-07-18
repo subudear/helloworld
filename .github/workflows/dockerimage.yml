@@ -37,7 +37,7 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - run: docker build --tag my-image:v1 .
+      - run: docker build --tag test-hello-world:v1.0 .
       - name: Push to ECR
         id: ecr
         uses: jwalton/gh-ecr-push@v1
@@ -45,5 +45,5 @@ jobs:
           access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           region: ap-southeast-2
-          image: my-image:v1
+          image: test-hello-world:v1.0
 
