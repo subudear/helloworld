@@ -51,7 +51,7 @@ jobs:
           access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           region: ap-southeast-2
-          image: test-hello-world:${{ env.version }}
+          image: test-hello-world:v1.0.5
 
   update-dev-image:
     runs-on: ubuntu-latest
