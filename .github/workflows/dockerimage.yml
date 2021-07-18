@@ -56,7 +56,7 @@ jobs:
     - uses: imranismail/setup-kustomize@v1
       with:
         kustomize-version: 3.8.6
-    - run: git clone https://${REPO_TOKEN}@github.com/subudear/gitops-infra-helloworld .
+    - run: git clone https://${REPO_TOKEN}@github.com/subudear/gitops-infra-helloworld.git .
       env:
         REPO_TOKEN: ${{secrets.REPO_TOKEN}}
     - run: kustomize edit set image test-hello-world:sha-$(git rev-parse --short $GITHUB_SHA)
