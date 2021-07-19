@@ -23,15 +23,19 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-southeast-2
+          aws-region: ${{ secrets.REGION }}
           
       - name: Push to ECR
         id: tag
         run: |
-          aws ecr get-login-password --region ap-southeast-2  | docker login --username AWS --password-stdin 706949302588.dkr.ecr.ap-southeast-2.amazonaws.com
-          docker build --tag 706949302588.dkr.ecr.ap-southeast-2.amazonaws.com/test-hello-world:v1.${GITHUB_RUN_NUMBER} .
+          aws ecr get-login-password --region $region  | docker login --username AWS --password-stdin $accountid.dkr.ecr.$region.amazonaws.com
+          docker build --tag $accountid.dkr.ecr.$region.amazonaws.com/$ecr_repository:v1.${GITHUB_RUN_NUMBER} .
           echo "::set-output name=tag::v1.${GITHUB_RUN_NUMBER}"
-          docker push 706949302588.dkr.ecr.ap-southeast-2.amazonaws.com/test-hello-world:v1.${GITHUB_RUN_NUMBER}
+          docker push $accountid.dkr.ecr.$region.amazonaws.com/$ecr_repository:v1.${GITHUB_RUN_NUMBER}
+        env:
+          accountid: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: ${{ secrets.REGION }}
+          ecr_repository: ${{ secrets.ECR_REPOSITORY }}
 
 
   update-dev-image:
