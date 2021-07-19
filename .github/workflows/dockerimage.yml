@@ -33,7 +33,7 @@ jobs:
           echo "::set-output name=tag::v1.${GITHUB_RUN_NUMBER}"
           docker push ${accountid}.dkr.ecr.${region}.amazonaws.com/${ecr_repository}:v1.${GITHUB_RUN_NUMBER}
         env:
-          accountid: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          accountid: ${{ secrets.ACCOUNTID}}
           region: ${{ secrets.REGION }}
           ecr_repository: ${{ secrets.ECR_REPOSITORY }}
 
