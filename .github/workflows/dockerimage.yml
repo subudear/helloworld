@@ -17,13 +17,6 @@ jobs:
       - name: Check out
         uses: actions/checkout@v2
 
-
-
-
-      - id: tag
-        run: |
-          docker build --tag test-hello-world:v1.${GITHUB_RUN_NUMBER} .
-          echo "::set-output name=tag::v1.${GITHUB_RUN_NUMBER}"
         
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -33,9 +26,11 @@ jobs:
           aws-region: ap-southeast-2
           
       - name: Push to ECR
-        id: ecr
+        id: tag
         run: |
           aws ecr get-login-password --region ap-southeast-2  | docker login --username AWS --password-stdin 706949302588.dkr.ecr.ap-southeast-2.amazonaws.com
+          docker build --tag test-hello-world:v1.${GITHUB_RUN_NUMBER} .
+          echo "::set-output name=tag::v1.${GITHUB_RUN_NUMBER}"
           docker push 706949302588.dkr.ecr.ap-southeast-2.amazonaws.com/test-hello-world:v1.${GITHUB_RUN_NUMBER}
 
 
