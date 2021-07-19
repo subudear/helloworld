@@ -28,10 +28,10 @@ jobs:
       - name: Push to ECR
         id: tag
         run: |
-          aws ecr get-login-password --region $region  | docker login --username AWS --password-stdin $accountid.dkr.ecr.$region.amazonaws.com
-          docker build --tag $accountid.dkr.ecr.$region.amazonaws.com/$ecr_repository:v1.${GITHUB_RUN_NUMBER} .
+          aws ecr get-login-password --region ${region}  | docker login --username AWS --password-stdin ${accountid}.dkr.ecr.${region}.amazonaws.com
+          docker build --tag ${accountid}.dkr.ecr.${region}.amazonaws.com/${ecr_repository}:v1.${GITHUB_RUN_NUMBER} .
           echo "::set-output name=tag::v1.${GITHUB_RUN_NUMBER}"
-          docker push $accountid.dkr.ecr.$region.amazonaws.com/$ecr_repository:v1.${GITHUB_RUN_NUMBER}
+          docker push ${accountid}.dkr.ecr.${region}.amazonaws.com/${ecr_repository}:v1.${GITHUB_RUN_NUMBER}
         env:
           accountid: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           region: ${{ secrets.REGION }}
